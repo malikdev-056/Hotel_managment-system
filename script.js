@@ -2,7 +2,7 @@ const today = new Date();
 const fmt = d => d.toISOString().split('T')[0];
 
 // const API_BASE = 'http://localhost:4000/api';
-const API_BASE = 'https://backend-hotel-liart.vercel.app/api';
+const API_BASE = 'https://backend-hotel-mangment.vercel.app/api';
 const apiFetch = async (path, options = {}) => {
   const res = await fetch(`${API_BASE}${path}`, {
     headers: { 'Content-Type': 'application/json' },
@@ -41,7 +41,6 @@ async function loadState() {
     renderSettings();
   } catch (error) {
     console.warn('Backend unavailable:', error);
-    showToast('Backend unavailable. Working offline.', 'error');
     renderDashboard();
     renderReservations();
     renderRooms();
@@ -219,6 +218,7 @@ function renderReservations(filter = 'all', search = '') {
       <td>
         <div style="display:flex;gap:6px">
           <button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="editReservation('${r.id}')">Edit</button>
+          <button class="btn btn-primary" style="padding:4px 10px;font-size:11px" onclick="openBillingForReservation('${r.id}')">Bill</button>
           <button class="btn btn-danger" style="padding:4px 10px;font-size:11px" onclick="cancelReservation('${r.id}')">Cancel</button>
         </div>
       </td>
@@ -331,8 +331,28 @@ function renderBilling() {
   `).join('');
 
   const sel = document.getElementById('bill-booking-select');
-  const checkedIn = state.reservations.filter(r => r.status === 'checked-in');
-  sel.innerHTML = '<option value="">-- Select Booking --</option>' + checkedIn.map(r => `<option value="${r.id}">${r.id} — ${r.guestName} (Room ${r.room})</option>`).join('');
+  const billable = state.reservations.filter(r => r.status !== 'cancelled');
+  sel.innerHTML = '<option value="">-- Select Booking --</option>' + billable.map(r => `<option value="${r.id}">${r.id} — ${r.guestName} (Room ${r.room})</option>`).join('');
+}
+
+function getGuestForReservation(reservation) {
+  return state.guests.find(g => g.id === reservation.guestId || `${g.fname} ${g.lname}` === reservation.guestName);
+}
+
+function openBillingForReservation(id) {
+  const nav = document.querySelector('[onclick*=billing]');
+  if (nav) navigate('billing', nav);
+  const tabs = document.querySelectorAll('#page-billing .tab');
+  tabs.forEach(t => t.classList.remove('active'));
+  const genTab = document.querySelector('#page-billing .tab[onclick*=generate-tab]') || tabs[1];
+  if (genTab) genTab.classList.add('active');
+  document.getElementById('invoices-tab').style.display = 'none';
+  document.getElementById('generate-tab').style.display = 'block';
+  const sel = document.getElementById('bill-booking-select');
+  if (sel) {
+    sel.value = id;
+    loadBillPreview();
+  }
 }
 
 function renderReports() {
@@ -578,15 +598,20 @@ function loadBillPreview() {
   preview.style.display = 'block';
   const tax = Math.round(r.amount * 0.1);
   const total = r.amount + tax;
+  const guest = getGuestForReservation(r);
   document.getElementById('bill-details').innerHTML = `
     <div style="display:flex;justify-content:space-between;margin-bottom:8px">
       <div><div style="font-family:Cormorant Garamond,serif;font-size:20px;color:var(--gold)">LuxeStay</div><div style="font-size:12px;color:var(--text-muted)">Grand Hotel</div></div>
       <div style="text-align:right"><div style="font-size:12px;color:var(--text-muted)">Booking</div><div style="color:var(--gold);font-weight:500">${r.id}</div></div>
     </div>
-    <div style="font-size:13px;color:var(--text-muted);margin-bottom:4px">Guest: <span style="color:var(--text)">${r.guestName}</span></div>
-    <div style="font-size:13px;color:var(--text-muted)">Room ${r.room} · ${r.checkin} → ${r.checkout}</div>`;
+    <div style="margin-bottom:12px">
+      <div style="font-size:14px;font-weight:600">Guest Details</div>
+      <div style="font-size:13px;color:var(--text)">${r.guestName}</div>
+      ${guest ? `<div style="font-size:12px;color:var(--text-muted)">Email: ${guest.email || 'N/A'}</div><div style="font-size:12px;color:var(--text-muted)">Phone: ${guest.phone || 'N/A'}</div>` : ''}
+      <div style="font-size:12px;color:var(--text-muted)">Room ${r.room} · ${r.checkin} → ${r.checkout}</div>
+    </div>`;
   document.getElementById('bill-line-items').innerHTML = `
-    <div class="bill-row"><span class="label">Room Charge (${r.nights} nights × $${Math.round(r.amount / r.nights)})</span><span class="amount">$${r.amount}</span></div>
+    <div class="bill-row"><span class="label">Room Charge (${r.nights} nights × $${r.nights ? Math.round(r.amount / r.nights) : r.amount})</span><span class="amount">$${r.amount}</span></div>
     <div class="bill-row"><span class="label">Tax (10%)</span><span class="amount">$${tax}</span></div>
     <div class="bill-row total"><span class="label">Total Due</span><span class="amount">$${total}</span></div>`;
 }
