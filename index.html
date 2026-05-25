@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuxeStay — Hotel Management System</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">LuxeStay</div>
+    <div class="tagline">Hotel Management</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <div class="nav-item active" onclick="navigate('dashboard',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </div>
+
+    <div class="nav-section-label">Operations</div>
+    <div class="nav-item" onclick="navigate('reservations',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Reservations
+      <span class="nav-badge" id="pending-badge">0</span>
+    </div>
+    <div class="nav-item" onclick="navigate('rooms',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M2 20V8l10-5 10 5v12"/><path d="M9 20v-8h6v8"/></svg>
+      Rooms
+    </div>
+    <div class="nav-item" onclick="navigate('guests',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a4 4 0 014-4h6a4 4 0 014 4v2"/><path d="M20 8v6M17 11h6"/></svg>
+      Guests
+    </div>
+    <div class="nav-item" onclick="navigate('checkinout',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Check In / Out
+    </div>
+    <div class="nav-item" onclick="navigate('housekeeping',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M9 9h6M9 13h6M9 17h6"/></svg>
+      Housekeeping
+    </div>
+
+    <div class="nav-section-label">Finance</div>
+    <div class="nav-item" onclick="navigate('billing',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      Billing
+    </div>
+    <div class="nav-item" onclick="navigate('reports',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Reports
+    </div>
+
+    <div class="nav-section-label">Settings</div>
+    <div class="nav-item" onclick="navigate('staff',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      Staff
+    </div>
+    <div class="nav-item" onclick="navigate('settings',this)">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Settings
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar">AM</div>
+      <div>
+        <div class="user-name">Admin Manager</div>
+        <div class="user-role">Super Admin</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<script>
+  if (localStorage.getItem('luxestayLoggedIn') !== 'true') {
+    window.location.href = 'login.html';
+  }
+</script>
+
+<!-- MAIN -->
+<main class="main">
+  <header class="topbar">
+    <div class="page-title" id="page-title">Dashboard</div>
+    <div class="topbar-right">
+      <div class="topbar-date" id="current-date"></div>
+      <button class="notif-btn" onclick="showToast('You have 3 pending reservations','success')">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <span class="notif-dot"></span>
+      </button>
+      <button class="btn btn-primary" onclick="handleTopAction()" id="top-action-btn">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Reservation
+      </button>
+      <button class="btn btn-ghost" style="margin-left:10px;padding:10px 14px;font-size:0.95rem" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card gold">
+          <div class="stat-icon gold-bg"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M2 20V8l10-5 10 5v12"/></svg></div>
+          <div class="stat-label">Total Rooms</div>
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-sub" id="stat-floor-count">Across 0 floors</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon green-bg"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="stat-label">Occupancy Rate</div>
+          <div class="stat-value" id="stat-occupancy">0%</div>
+          <div class="stat-sub" id="stat-occupied-count">0 of 0 occupied</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-icon blue-bg"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="stat-label">Today's Check-ins</div>
+          <div class="stat-value" id="stat-checkins">0</div>
+          <div class="stat-sub" id="stat-checkins-sub">0 scheduled</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-icon gold-bg"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+          <div class="stat-label">Revenue Today</div>
+          <div class="stat-value" id="stat-revenue">$0</div>
+          <div class="stat-sub" id="stat-revenue-sub">0% vs yesterday</div>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <div class="qa-card" onclick="navigate('reservations',document.querySelector('[onclick*=reservations]'));openModal('reservationModal')">
+          <div class="qa-icon" style="background:rgba(201,168,76,0.1)"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#C9A84C" stroke-width="1.8"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+          <div><div class="qa-text">New Booking</div><div class="qa-sub">Create reservation</div></div>
+        </div>
+        <div class="qa-card" onclick="navigate('checkinout',document.querySelector('[onclick*=checkinout]'))">
+          <div class="qa-icon" style="background:var(--green-bg)"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="var(--green)" stroke-width="1.8"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg></div>
+          <div><div class="qa-text">Check In</div><div class="qa-sub">Guest arrival</div></div>
+        </div>
+        <div class="qa-card" onclick="navigate('billing',document.querySelector('[onclick*=billing]'))">
+          <div class="qa-icon" style="background:var(--blue-bg)"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="var(--blue)" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+          <div><div class="qa-text">Generate Bill</div><div class="qa-sub">Invoice guest</div></div>
+        </div>
+        <div class="qa-card" onclick="navigate('housekeeping',document.querySelector('[onclick*=housekeeping]'))">
+          <div class="qa-icon" style="background:var(--amber-bg)"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="var(--amber)" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+          <div><div class="qa-text">Housekeeping</div><div class="qa-sub">Assign tasks</div></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <div class="section-header">
+            <div class="section-title">Recent Reservations</div>
+            <button class="btn btn-ghost" onclick="navigate('reservations',document.querySelector('[onclick*=reservations]'))">View All</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Guest</th><th>Room</th><th>Check-in</th><th>Status</th></tr></thead>
+              <tbody id="recent-reservations-tbody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="section-header">
+            <div class="section-title">Recent Activity</div>
+          </div>
+          <div class="table-wrap" style="padding:16px">
+            <div id="activity-feed"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-header" style="margin-top:0">
+        <div class="section-title">Floor Overview</div>
+        <div style="display:flex;gap:12px;font-size:12px">
+          <span style="color:var(--green)">● Available</span>
+          <span style="color:var(--red)">● Occupied</span>
+          <span style="color:var(--blue)">● Reserved</span>
+          <span style="color:var(--amber)">● Maintenance</span>
+        </div>
+      </div>
+      <div id="floor-overview"></div>
+    </div>
+
+    <!-- RESERVATIONS -->
+    <div class="page" id="page-reservations">
+      <div class="filter-row">
+        <div class="search-bar">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search guest, room..." id="res-search" oninput="filterReservations()">
+        </div>
+        <button class="filter-chip active" data-filter="all" onclick="setResFilter('all',this)">All</button>
+        <button class="filter-chip" data-filter="confirmed" onclick="setResFilter('confirmed',this)">Confirmed</button>
+        <button class="filter-chip" data-filter="pending" onclick="setResFilter('pending',this)">Pending</button>
+        <button class="filter-chip" data-filter="checked-in" onclick="setResFilter('checked-in',this)">Checked In</button>
+        <button class="filter-chip" data-filter="checked-out" onclick="setResFilter('checked-out',this)">Checked Out</button>
+        <button class="btn btn-primary" style="margin-left:auto" onclick="openModal('reservationModal')">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Reservation
+        </button>
+      </div>
+      <div class="table-wrap overflow-x">
+        <table>
+          <thead><tr><th>Booking ID</th><th>Guest Name</th><th>Room</th><th>Check-In</th><th>Check-Out</th><th>Nights</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="reservations-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ROOMS -->
+    <div class="page" id="page-rooms">
+      <div class="filter-row">
+        <button class="filter-chip active" onclick="setRoomFilter('all',this)">All Rooms</button>
+        <button class="filter-chip" onclick="setRoomFilter('available',this)">Available</button>
+        <button class="filter-chip" onclick="setRoomFilter('occupied',this)">Occupied</button>
+        <button class="filter-chip" onclick="setRoomFilter('reserved',this)">Reserved</button>
+        <button class="filter-chip" onclick="setRoomFilter('maintenance',this)">Maintenance</button>
+        <button class="btn btn-primary" style="margin-left:auto" onclick="openModal('roomModal')">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Room
+        </button>
+      </div>
+      <div class="room-grid" id="rooms-grid"></div>
+    </div>
+
+    <!-- GUESTS -->
+    <div class="page" id="page-guests">
+      <div class="filter-row">
+        <div class="search-bar">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search guests..." id="guest-search" oninput="filterGuests()">
+        </div>
+        <button class="btn btn-primary" style="margin-left:auto" onclick="openModal('guestModal')">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Guest
+        </button>
+      </div>
+      <div class="table-wrap overflow-x">
+        <table>
+          <thead><tr><th>Guest ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Nationality</th><th>Stays</th><th>Total Spent</th><th>Actions</th></tr></thead>
+          <tbody id="guests-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CHECK IN / OUT -->
+    <div class="page" id="page-checkinout">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('checkin-tab',this)">Check In</div>
+        <div class="tab" onclick="switchTab('checkout-tab',this)">Check Out</div>
+      </div>
+      <div id="checkin-tab">
+        <div class="section-header"><div class="section-title">Pending Check-Ins Today</div></div>
+        <div class="table-wrap overflow-x">
+          <table>
+            <thead><tr><th>Booking ID</th><th>Guest Name</th><th>Room</th><th>Expected</th><th>ID Verified</th><th>Action</th></tr></thead>
+            <tbody id="checkin-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="checkout-tab" style="display:none">
+        <div class="section-header"><div class="section-title">Active Check-Ins (Ready to Checkout)</div></div>
+        <div class="table-wrap overflow-x">
+          <table>
+            <thead><tr><th>Booking ID</th><th>Guest Name</th><th>Room</th><th>Check-Out Date</th><th>Due Amount</th><th>Action</th></tr></thead>
+            <tbody id="checkout-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOUSEKEEPING -->
+    <div class="page" id="page-housekeeping">
+      <div class="filter-row">
+        <button class="filter-chip active" onclick="setHKFilter('all',this)">All Tasks</button>
+        <button class="filter-chip" onclick="setHKFilter('pending',this)">Pending</button>
+        <button class="filter-chip" onclick="setHKFilter('in-progress',this)">In Progress</button>
+        <button class="filter-chip" onclick="setHKFilter('completed',this)">Completed</button>
+        <button class="btn btn-primary" style="margin-left:auto" onclick="openModal('hkModal')">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Assign Task
+        </button>
+      </div>
+      <div class="table-wrap overflow-x">
+        <table>
+          <thead><tr><th>Task ID</th><th>Room</th><th>Type</th><th>Assigned To</th><th>Priority</th><th>Status</th><th>Notes</th><th>Actions</th></tr></thead>
+          <tbody id="hk-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- BILLING -->
+    <div class="page" id="page-billing">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('invoices-tab',this)">Invoices</div>
+        <div class="tab" onclick="switchTab('generate-tab',this)">Generate Bill</div>
+      </div>
+      <div id="invoices-tab">
+        <div class="table-wrap overflow-x">
+          <table>
+            <thead><tr><th>Invoice #</th><th>Guest</th><th>Room</th><th>Dates</th><th>Amount</th><th>Paid</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="billing-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="generate-tab" style="display:none">
+        <div style="max-width:560px">
+          <div class="form-group" style="margin-bottom:16px">
+            <label>Select Booking ID</label>
+            <select id="bill-booking-select" onchange="loadBillPreview()">
+              <option value="">-- Select Booking --</option>
+            </select>
+          </div>
+          <div id="bill-preview" style="display:none">
+            <div class="table-wrap" style="padding:20px;margin-top:0">
+              <div id="bill-details"></div>
+              <div class="divider"></div>
+              <div id="bill-line-items"></div>
+              <button class="btn btn-primary" style="margin-top:20px" onclick="generateInvoice()">Generate Invoice</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORTS -->
+    <div class="page" id="page-reports">
+      <div class="grid-3 report-metrics" id="report-metrics" style="margin-bottom:24px"></div>
+      <div class="grid-2">
+        <div class="chart-box">
+          <div class="section-title" style="margin-bottom:4px">Weekly Revenue</div>
+          <div style="font-size:12px;color:var(--text-muted)">Last 7 days</div>
+          <div class="mini-bar-chart" id="revenue-chart"></div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-top:4px">
+            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+          </div>
+        </div>
+        <div class="chart-box">
+          <div class="section-title" style="margin-bottom:4px">Occupancy Trend</div>
+          <div style="font-size:12px;color:var(--text-muted)">Last 7 days</div>
+          <div class="mini-bar-chart" id="occupancy-chart"></div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-top:4px">
+            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-header"><div class="section-title">Room Type Performance</div></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Room Type</th><th>Count</th><th>Avg Rate</th><th>Occupancy</th><th>Revenue</th></tr></thead>
+          <tbody id="report-performance-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- STAFF -->
+    <div class="page" id="page-staff">
+      <div class="filter-row">
+        <div class="search-bar">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search staff..." id="staff-search" oninput="filterStaff()">
+        </div>
+        <button class="btn btn-primary" style="margin-left:auto" onclick="openModal('staffModal')">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Staff
+        </button>
+      </div>
+      <div class="table-wrap overflow-x">
+        <table>
+          <thead><tr><th>Staff ID</th><th>Name</th><th>Role</th><th>Department</th><th>Shift</th><th>Contact</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="staff-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page" id="page-settings">
+      <div class="grid-2">
+        <div>
+          <div class="section-title" style="margin-bottom:16px">Hotel Information</div>
+          <div class="table-wrap" style="padding:20px">
+            <div class="form-group" style="margin-bottom:16px"><label>Hotel Name</label><input id="hotel-name"></div>
+            <div class="form-group" style="margin-bottom:16px"><label>Address</label><input id="hotel-address"></div>
+            <div class="form-group" style="margin-bottom:16px"><label>Phone</label><input id="hotel-phone"></div>
+            <div class="form-group" style="margin-bottom:16px"><label>Email</label><input id="hotel-email"></div>
+            <div class="form-group" style="margin-bottom:16px"><label>Currency</label><select id="hotel-currency"><option>USD ($)</option><option>EUR (€)</option><option>GBP (£)</option><option>PKR (₨)</option></select></div>
+            <div class="form-group" style="margin-bottom:20px"><label>Tax Rate (%)</label><input id="hotel-tax" type="number"></div>
+            <button class="btn btn-primary" onclick="saveSettings()">Save Changes</button>
+          </div>
+        </div>
+        <div>
+          <div class="section-title" style="margin-bottom:16px">Room Pricing</div>
+          <div class="table-wrap" style="padding:20px">
+            <div class="form-group" style="margin-bottom:16px"><label>Standard Room (per night)</label><input id="price-standard" type="number"></div>
+            <div class="form-group" style="margin-bottom:16px"><label>Deluxe Room (per night)</label><input id="price-deluxe" type="number"></div>
+            <div class="form-group" style="margin-bottom:16px"><label>Suite (per night)</label><input id="price-suite" type="number"></div>
+            <div class="form-group" style="margin-bottom:16px"><label>Presidential Suite (per night)</label><input id="price-presidential" type="number"></div>
+            <div class="form-group" style="margin-bottom:16px"><label>Early Check-in Fee</label><input id="fee-early-checkin" type="number"></div>
+            <div class="form-group" style="margin-bottom:20px"><label>Late Check-out Fee</label><input id="fee-late-checkout" type="number"></div>
+            <button class="btn btn-primary" onclick="savePricing()">Update Pricing</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end page-content -->
+</main>
+
+<!-- ===================== MODALS ===================== -->
+
+<!-- Reservation Modal -->
+<div class="modal-overlay" id="reservationModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">New Reservation</div>
+      <button class="modal-close" onclick="closeModal('reservationModal')">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>First Name</label><input id="res-fname" placeholder="John"></div>
+      <div class="form-group"><label>Last Name</label><input id="res-lname" placeholder="Smith"></div>
+      <div class="form-group"><label>Email</label><input id="res-email" type="email" placeholder="john@email.com"></div>
+      <div class="form-group"><label>Phone</label><input id="res-phone" placeholder="+1 555-0100"></div>
+      <div class="form-group"><label>Room</label>
+        <select id="res-room">
+          <option value="">Select Room</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Adults</label><select id="res-adults"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+      <div class="form-group"><label>Check-In Date</label><input id="res-checkin" type="date"></div>
+      <div class="form-group"><label>Check-Out Date</label><input id="res-checkout" type="date"></div>
+      <div class="form-group full"><label>Special Requests</label><textarea id="res-notes" placeholder="Any special requirements..."></textarea></div>
+      <div class="form-group"><label>Payment Method</label><select id="res-payment"><option>Credit Card</option><option>Cash</option><option>Bank Transfer</option></select></div>
+      <div class="form-group"><label>Status</label><select id="res-status"><option>confirmed</option><option>pending</option></select></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('reservationModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveReservation()">Create Reservation</button>
+    </div>
+  </div>
+</div>
+
+<!-- Room Modal -->
+<div class="modal-overlay" id="roomModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add / Edit Room</div>
+      <button class="modal-close" onclick="closeModal('roomModal')">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>Room Number</label><input id="room-number" placeholder="101"></div>
+      <div class="form-group"><label>Floor</label><select id="room-floor"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+      <div class="form-group"><label>Type</label><select id="room-type"><option>Standard</option><option>Deluxe</option><option>Suite</option><option>Presidential</option></select></div>
+      <div class="form-group"><label>Capacity</label><select id="room-capacity"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+      <div class="form-group"><label>Price / Night ($)</label><input id="room-price" type="number" placeholder="120"></div>
+      <div class="form-group"><label>Status</label><select id="room-status-select"><option>available</option><option>occupied</option><option>reserved</option><option>maintenance</option></select></div>
+      <div class="form-group full"><label>Amenities</label><input id="room-amenities" placeholder="WiFi, AC, TV, Mini Bar..."></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('roomModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveRoom()">Save Room</button>
+    </div>
+  </div>
+</div>
+
+<!-- Guest Modal -->
+<div class="modal-overlay" id="guestModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add / Edit Guest</div>
+      <button class="modal-close" onclick="closeModal('guestModal')">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>First Name</label><input id="guest-fname" placeholder="John"></div>
+      <div class="form-group"><label>Last Name</label><input id="guest-lname" placeholder="Smith"></div>
+      <div class="form-group"><label>Email</label><input id="guest-email" type="email"></div>
+      <div class="form-group"><label>Phone</label><input id="guest-phone"></div>
+      <div class="form-group"><label>Nationality</label><input id="guest-nationality" placeholder="American"></div>
+      <div class="form-group"><label>ID Type</label><select id="guest-id-type"><option>Passport</option><option>National ID</option><option>Driver License</option></select></div>
+      <div class="form-group full"><label>ID Number</label><input id="guest-id-number"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('guestModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveGuest()">Save Guest</button>
+    </div>
+  </div>
+</div>
+
+<!-- Housekeeping Modal -->
+<div class="modal-overlay" id="hkModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Assign Housekeeping Task</div>
+      <button class="modal-close" onclick="closeModal('hkModal')">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>Room</label><select id="hk-room"></select></div>
+      <div class="form-group"><label>Task Type</label><select id="hk-type"><option>Full Cleaning</option><option>Turndown</option><option>Linen Change</option><option>Deep Clean</option><option>Inspection</option></select></div>
+      <div class="form-group"><label>Assigned To</label><select id="hk-staff"></select></div>
+      <div class="form-group"><label>Priority</label><select id="hk-priority"><option>Normal</option><option>High</option><option>Urgent</option></select></div>
+      <div class="form-group full"><label>Notes</label><textarea id="hk-notes" placeholder="Special instructions..."></textarea></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('hkModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveHKTask()">Assign Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- Staff Modal -->
+<div class="modal-overlay" id="staffModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add Staff Member</div>
+      <button class="modal-close" onclick="closeModal('staffModal')">×</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>First Name</label><input id="staff-fname" placeholder="Jane"></div>
+      <div class="form-group"><label>Last Name</label><input id="staff-lname" placeholder="Doe"></div>
+      <div class="form-group"><label>Role</label><select id="staff-role"><option>Receptionist</option><option>Housekeeper</option><option>Manager</option><option>Chef</option><option>Security</option><option>Concierge</option></select></div>
+      <div class="form-group"><label>Department</label><select id="staff-dept"><option>Front Desk</option><option>Housekeeping</option><option>Management</option><option>F&B</option><option>Security</option></select></div>
+      <div class="form-group"><label>Shift</label><select id="staff-shift"><option>Morning (6AM-2PM)</option><option>Afternoon (2PM-10PM)</option><option>Night (10PM-6AM)</option></select></div>
+      <div class="form-group"><label>Phone</label><input id="staff-phone"></div>
+      <div class="form-group full"><label>Email</label><input id="staff-email" type="email"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('staffModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveStaff()">Add Staff</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-icon">✓</div>
+  <span id="toast-msg">Done!</span>
+</div>
+
+<script src="script.js?v=2"></script>
+</body>
+</html>

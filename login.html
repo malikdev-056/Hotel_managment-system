@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LuxeStay Login</title>
+  <style>
+    :root {
+      --bg: #060814;
+      --panel: rgba(18, 26, 50, 0.95);
+      --text: #f5f7ff;
+      --muted: #a3b1d1;
+      --gold: #f2c94c;
+      --green: #27d18b;
+      --danger: #ff4d4f;
+      font-family: 'DM Sans', sans-serif;
+    }
+    * {box-sizing:border-box;}
+    body {margin:0;background:linear-gradient(135deg,#070c1a,#1b2340);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;}
+    .login-shell {width:min(420px,calc(100% - 32px));padding:32px;background:var(--panel);border:1px solid rgba(255,255,255,0.08);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,0.25);}
+    .login-header {margin-bottom:24px;text-align:center;}
+    .login-header h1 {margin:0;font-size:2rem;letter-spacing:0.04em;color:var(--gold);}
+    .login-header p {margin:8px 0 0;color:var(--muted);font-size:0.95rem;}
+    .form-group {margin-bottom:18px;}
+    label {display:block;font-size:0.88rem;color:var(--muted);margin-bottom:8px;}
+    input {width:100%;padding:14px 16px;border:1px solid rgba(255,255,255,0.12);border-radius:14px;background:rgba(255,255,255,0.05);color:var(--text);font-size:1rem;outline:none;}
+    input:focus {border-color:rgba(242,201,76,0.8);box-shadow:0 0 0 4px rgba(242,201,76,0.15);}
+    .btn {width:100%;padding:14px 16px;border:none;border-radius:14px;background:var(--gold);color:#111;font-weight:700;font-size:1rem;cursor:pointer;transition:transform .2s ease;}
+    .btn:hover {transform:translateY(-1px);}
+    .note {margin-top:16px;font-size:0.95rem;color:var(--muted);line-height:1.5;}
+    .error {margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(255,77,79,0.14);color:#ffb3b8;font-size:0.95rem;display:none;}
+  </style>
+</head>
+<body>
+  <div class="login-shell">
+    <div class="login-header">
+      <h1>LuxeStay Login</h1>
+      <p>Enter the manager credentials to continue.</p>
+    </div>
+    <div class="form-group">
+      <label for="login-email">Email</label>
+      <input id="login-email" type="email" placeholder="admin@luxestay.com" value="admin@luxestay.com">
+    </div>
+    <div class="form-group">
+      <label for="login-password">Password</label>
+      <input id="login-password" type="password" placeholder="Admin123" value="">
+    </div>
+    <button class="btn" onclick="handleLogin()">Sign In</button>
+    <div class="error" id="login-error">Invalid email or password.</div>
+    <div class="note">Use <strong>admin@luxestay.com</strong> and <strong>Admin123</strong>.</div>
+  </div>
+  <script>
+    const validEmail = 'admin@luxestay.com';
+    const validPassword = 'Admin123';
+
+    function handleLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const error = document.getElementById('login-error');
+      error.style.display = 'none';
+      if (email === validEmail && password === validPassword) {
+        localStorage.setItem('luxestayLoggedIn', 'true');
+        window.location.href = 'index.html';
+      } else {
+        error.style.display = 'block';
+      }
+    }
+
+    if (localStorage.getItem('luxestayLoggedIn') === 'true') {
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
