@@ -1,8 +1,8 @@
 const today = new Date();
 const fmt = d => d.toISOString().split('T')[0];
 
-const API_BASE = 'http://localhost:4000/api';
-
+// const API_BASE = 'http://localhost:4000/api';
+const API_BASE = 'https://backend-hotel-liart.vercel.app/api';
 const apiFetch = async (path, options = {}) => {
   const res = await fetch(`${API_BASE}${path}`, {
     headers: { 'Content-Type': 'application/json' },
